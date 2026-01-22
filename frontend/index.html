@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Microservices App</title>
+</head>
+<body>
+
+<h1>Microservices App</h1>
+
+<input id="msg" placeholder="Enter message">
+<button onclick="send()">Send</button>
+
+<ul id="list"></ul>
+
+<script>
+const API_URL = "http://backend-service:5000/messages";
+
+function send() {
+    fetch(API_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text: msg.value})
+    }).then(() => {
+        msg.value = "";
+        load();
+    });
+}
+
+function load() {
+    fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+            list.innerHTML = "";
+            data.forEach(item => {
+                let li = document.createElement("li");
+                li.innerText = item;
+                list.appendChild(li);
+            });
+        });
+}
+
+load();
+</script>
+
+</body>
+</html>
 
